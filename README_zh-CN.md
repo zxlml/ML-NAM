@@ -1,10 +1,11 @@
 <div align="center">
 
-# ML-NAM：最大似然神经可加模型
+# Maximum Likelihood Neural Additive Models
 
 [![Journal](https://img.shields.io/badge/Journal-Information%20Sciences-blue)](https://doi.org/10.1016/j.ins.2026.123104)
 [![DOI](https://img.shields.io/badge/DOI-10.1016%2Fj.ins.2026.123104-9cf)](https://doi.org/10.1016/j.ins.2026.123104)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Paper](https://img.shields.io/badge/Paper-ScienceDirect-orange)](https://www.sciencedirect.com/science/article/abs/pii/S0020025526000356)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-orange.svg)](https://www.python.org/)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.0%2B-red.svg)](https://pytorch.org/)
 
@@ -157,25 +158,25 @@ ML-NAM 仍在持续演进！以下是后续计划：
 * [ ] 已学习分量函数的形状可视化工具
 * [ ] 面向大 p、大 n 的 GPU 加速工具
 
-## 🔗 引用
-
-如果本工作对您有帮助，请引用：
-
-```bibtex
-@article{chen2026mlnam,
-  title   = {Maximum likelihood neural additive models},
-  author  = {Chen, Jingyi and Zhang, Xuelin and Yuan, Peipei and Lan, Rushi and Chen, Hong},
-  journal = {Information Sciences},
-  volume  = {736},
-  pages   = {123104},
-  year    = {2026},
-  issn    = {0020-0255},
-  doi     = {10.1016/j.ins.2026.123104}
-}
-```
-
 ## 🙏 致谢
 
 本项目建立在 [Neural Additive Models](https://arxiv.org/abs/2004.13946)（Agarwal et al., 2021）的思想及[官方 NAM 实现](https://github.com/Argonne-NEXT/NAMU)的基础上，感谢开源社区的贡献。
 
-<p align="right"><a href="#ml-nam最大似然神经可加模型">⬆️ 返回顶部</a></p>
+## 🔗 引用
+
+如果本工作对您有帮助，请引用：
+
+
+```bibtex
+@article{chen2026maximum,
+  title={Maximum likelihood neural additive models},
+  author={Chen, Jingyi and Zhang, Xuelin and Yuan, Peipei and Lan, Rushi and Chen, Hong},
+  journal={Information Sciences},
+  volume={736},
+  pages={123104},
+  year={2026},
+  publisher={Elsevier}
+}
+```
+
+<p align="right"><a href="#maximum-likelihood-neural-additive-models">⬆️ 返回顶部</a></p>

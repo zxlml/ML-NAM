@@ -1,10 +1,11 @@
 <div align="center">
 
-# ML-NAM: Maximum Likelihood Neural Additive Models
+# Maximum Likelihood Neural Additive Models
 
 [![Journal](https://img.shields.io/badge/Journal-Information%20Sciences-blue)](https://doi.org/10.1016/j.ins.2026.123104)
 [![DOI](https://img.shields.io/badge/DOI-10.1016%2Fj.ins.2026.123104-9cf)](https://doi.org/10.1016/j.ins.2026.123104)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Paper](https://img.shields.io/badge/Paper-ScienceDirect-orange)](https://www.sciencedirect.com/science/article/abs/pii/S0020025526000356)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-orange.svg)](https://www.python.org/)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.0%2B-red.svg)](https://pytorch.org/)
 
@@ -157,25 +158,25 @@ ML-NAM is continuously evolving! Here's what's coming:
 * [ ] Shape-function visualization tool for the learned component functions
 * [ ] GPU acceleration utilities for large p and large n
 
-## 🔗 Citation
-
-If you find this work useful, please cite:
-
-```bibtex
-@article{chen2026mlnam,
-  title   = {Maximum likelihood neural additive models},
-  author  = {Chen, Jingyi and Zhang, Xuelin and Yuan, Peipei and Lan, Rushi and Chen, Hong},
-  journal = {Information Sciences},
-  volume  = {736},
-  pages   = {123104},
-  year    = {2026},
-  issn    = {0020-0255},
-  doi     = {10.1016/j.ins.2026.123104}
-}
-```
-
 ## 🙏 Acknowledgements
 
 This project builds upon the ideas of [Neural Additive Models](https://arxiv.org/abs/2004.13946) (Agarwal et al., 2021) and the [official NAM implementation](https://github.com/Argonne-NEXT/NAMU). We thank the community for open-sourcing related resources.
 
-<p align="right"><a href="#ml-nam-maximum-likelihood-neural-additive-models">⬆️ Back to top</a></p>
+## 🔗 Citation
+
+If you find this work useful, please cite:
+
+
+```bibtex
+@article{chen2026maximum,
+  title={Maximum likelihood neural additive models},
+  author={Chen, Jingyi and Zhang, Xuelin and Yuan, Peipei and Lan, Rushi and Chen, Hong},
+  journal={Information Sciences},
+  volume={736},
+  pages={123104},
+  year={2026},
+  publisher={Elsevier}
+}
+```
+
+<p align="right"><a href="#maximum-likelihood-neural-additive-models">⬆️ Back to top</a></p>
