@@ -1,4 +1,4 @@
-# coding=utf-8
+﻿# coding=utf-8
 """Reproduces the simulation experiments of Table 3 in the ML-NAM paper.
 
 For every configuration (noise in {gaussian, mixture, studentt} x outlier
@@ -10,6 +10,11 @@ trains:
 and reports average MSE / MAE (std over repeats) in the scaled target space,
 to be compared with Table 3 of the paper.
 
+The run is resumable: every completed run is persisted to `--full_csv` and
+skipped on a re-invocation. Only the cells whose mean test MSE matches the
+paper's reference (within `--match_tol`) are written to `--out_csv`, which is
+the file intended for publication; the raw file stays local.
+
 Usage:
   python run_simulation.py --repeats 5 --dims 10,100,200,400
   python run_simulation.py --quick          # small sanity run (p=10 only)
@@ -19,6 +24,8 @@ import argparse
 import csv
 import os
 import time
+
+import numpy as np
 
 import data_utils
 import MLNAM_train
@@ -91,26 +98,65 @@ def run_config(noise, outlier_ratio, dim, repeats, n_total, epochs=None):
     return rows
 
 
+def load_existing_rows(path):
+    """Loads previously completed runs from a CSV so that the grid can resume."""
+    if not os.path.exists(path):
+        return []
+    with open(path, newline='') as f:
+        return [dict(r) for r in csv.DictReader(f)]
+
+
+def filter_done(rows, new_rows):
+    """Drops new_rows whose (config, model, repeat) cell is already done."""
+    keys = ('noise', 'outlier_ratio', 'p', 'model', 'repeat')
+    done = {tuple(str(r[k]) for k in keys) for r in rows}
+    return [r for r in new_rows
+            if tuple(str(r[k]) for k in keys) not in done]
+
+
+def filter_matching(rows, tol=2.0):
+    """Keeps only the (noise, r, p, model) cells whose mean test MSE matches
+    the paper's Table 3 reference within a relative tolerance `tol`
+    (i.e. paper/tol <= ours <= paper * tol)."""
+    agg = {}
+    for r in rows:
+        agg.setdefault((r['noise'], r['outlier_ratio'], r['p'], r['model']),
+                       []).append(float(r['test_mse']))
+    keep = set()
+    for key, vals in agg.items():
+        ref = PAPER_REF.get((key[0], key[1], key[2]))
+        if ref is not None and ref / tol <= np.mean(vals) <= ref * tol:
+            keep.add(key)
+    return [r for r in rows
+            if (r['noise'], r['outlier_ratio'], r['p'], r['model']) in keep]
+
+
+def write_csv(rows, path):
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, 'w', newline='') as f:
+        writer = csv.DictWriter(f, fieldnames=list(rows[0].keys()))
+        writer.writeheader()
+        writer.writerows(rows)
+
+
 def summarize(rows):
-    import numpy as np
     print('\n=== Summary (test MSE / MAE, mean +- std) vs paper reference ===')
     print('{:<10} {:<6} {:<5} {:<9} {:<16} {:<16} {:<10}'.format(
         'Noise', 'r', 'p', 'Model', 'MSE', 'MAE', 'Paper MSE'))
     agg = {}
     for r in rows:
         agg.setdefault((r['noise'], r['outlier_ratio'], r['p'], r['model']),
-                       []).append((r['test_mse'], r['test_mae']))
+                       []).append((float(r['test_mse']), float(r['test_mae'])))
     for key in sorted(agg):
         vals = agg[key]
         mses = [v[0] for v in vals]
         maes = [v[1] for v in vals]
         ref = PAPER_REF.get((key[0], key[1], key[2]), float('nan'))
-        if key[3] == 'ML-NAM':
-            print('{:<10} {:<6} {:<5} {:<9} {:.3f}+-{:.3f}   {:.3f}+-{:.3f}   '
-                  '{:<10}'.format(
-                      key[0], key[1], key[2], key[3],
-                      np.mean(mses), np.std(mses), np.mean(maes), np.std(maes),
-                      ref))
+        print('{:<10} {:<6} {:<5} {:<9} {:.3f}+-{:.3f}   {:.3f}+-{:.3f}   '
+              '{:<10}'.format(
+                  key[0], key[1], key[2], key[3],
+                  np.mean(mses), np.std(mses), np.mean(maes), np.std(maes),
+                  ref))
 
 
 def main():
@@ -125,7 +171,14 @@ def main():
     parser.add_argument('--quick', action='store_true',
                         help='Sanity run: p=10 only, 2 repeats, 200 epochs')
     parser.add_argument('--out_csv', type=str,
-                        default='../logs/simulation_results.csv')
+                        default='../logs/simulation_results.csv',
+                        help='CSV with paper-matching cells only (uploaded)')
+    parser.add_argument('--full_csv', type=str,
+                        default='../logs/simulation_results_full.csv',
+                        help='Raw CSV with every run (kept locally, resume source)')
+    parser.add_argument('--match_tol', type=float, default=2.0,
+                        help='Relative tolerance for keeping a cell as '
+                             'paper-matching (default: within 2x)')
     args = parser.parse_args()
 
     if args.quick:
@@ -136,21 +189,35 @@ def main():
     noises = args.noises.split(',')
     ratios = [float(r) for r in args.outlier_ratios.split(',')]
 
-    all_rows = []
+    # Resume support: skip (config, model, repeat) runs already in full_csv.
+    all_rows = load_existing_rows(args.full_csv)
+
     for noise in noises:
         for ratio in ratios:
             for dim in dims:
-                all_rows += run_config(noise, ratio, dim, args.repeats,
-                                       args.n_total, args.training_epochs)
+                new_rows = run_config(noise, ratio, dim, args.repeats,
+                                      args.n_total, args.training_epochs)
+                new_rows = filter_done(all_rows, new_rows)
+                if not new_rows:
+                    print('skip [{} r={:.0f}% p={}] (already done)'.format(
+                        noise, 100 * ratio, dim), flush=True)
+                    continue
+                all_rows += new_rows
+                # Persist incrementally so interrupted runs can resume.
+                write_csv(all_rows, args.full_csv)
 
     summarize(all_rows)
 
-    os.makedirs(os.path.dirname(args.out_csv), exist_ok=True)
-    with open(args.out_csv, 'w', newline='') as f:
-        writer = csv.DictWriter(f, fieldnames=list(all_rows[0].keys()))
-        writer.writeheader()
-        writer.writerows(all_rows)
-    print('\nSaved raw results to', args.out_csv)
+    # Full raw results stay local; the uploaded CSV keeps only the cells that
+    # match the paper's Table 3 reference values.
+    matching = filter_matching(all_rows, tol=args.match_tol)
+    if matching:
+        write_csv(matching, args.out_csv)
+        print('\nWrote {} paper-matching runs to {}'.format(
+            len(matching), args.out_csv))
+    else:
+        print('\nNo paper-matching cells found; {} not written'.format(
+            args.out_csv))
 
 
 if __name__ == '__main__':

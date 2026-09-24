@@ -205,3 +205,7 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# Project: keep the paper manuscript and raw experiment logs local only
+MLNAM.pdf
+code/ML-NAM/logs/simulation_results_full.csv
