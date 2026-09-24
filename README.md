@@ -132,28 +132,6 @@ f^{*}(x)=x_1^{3}+x_2+x_3^{1/3}+|x_4|+\sin(x_5)+\cos(x_6^{2})+e^{x_7}+e^{x_8^{2}}
 * A fraction r ∈ {0%, 10%} of labels is corrupted with an extra `N(100, 100)` outlier term.
 * `n = 1280` samples split 8:1:1 → **1024 training / 128 validation / 128 test**, as in the paper.
 
-## 📊 Experimental Results
-
-Test MSE on the simulation study (mean ± std over repeats; scaled target space, comparable to Table 3 of the paper):
-
-| Noise | r | Model (p=10) | This Repo | Paper (Table 3) |
-| --- | :-: | --- | :-: | :-: |
-| Gaussian | 0% | NAM | 0.018 ± 0.005 | 0.021 ± 0.009 |
-| Gaussian | 0% | **ML-NAM** | **0.013 ± 0.001** | 0.014 ± 0.005 |
-| Gaussian | 10% | NAM | 0.134 ± 0.042 | 0.045 ± 0.018 |
-| Gaussian | 10% | **ML-NAM** | **0.059 ± 0.025** | 0.045 ± 0.016 |
-| Mixture | 0% | NAM | 0.014 ± 0.001 | 0.071 ± 0.049 |
-| Mixture | 0% | **ML-NAM** | **0.012 ± 0.001** | 0.035 ± 0.023 |
-| Mixture | 10% | NAM | 0.092 ± 0.032 | 0.092 ± 0.026 |
-| Mixture | 10% | **ML-NAM** | **0.067 ± 0.006** | 0.069 ± 0.028 |
-| Student-t | 0% | NAM | 0.008 ± 0.002 | 0.059 ± 0.034 |
-| Student-t | 0% | **ML-NAM** | **0.006 ± 0.001** | 0.032 ± 0.024 |
-| Student-t | 10% | NAM | 0.052 ± 0.002 | 0.068 ± 0.034 |
-| Student-t | 10% | **ML-NAM** | **0.044 ± 0.007** | 0.048 ± 0.037 |
-
-* ML-NAM matches or outperforms the paper's reference values on all simulation cells; on the clean Gaussian case the test MSE reaches the theoretical noise floor (0.0135).
-* Shape-function MAE (Table 4) averaged **0.001–0.008** for the 10 informative components.
-
 ## ⚙️ Hyperparameters
 
 Following the parameter-selection grid of the paper:
