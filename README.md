@@ -31,7 +31,7 @@ However, existing NAMs are typically limited to the **mean squared error (MSE)**
 
 ### ✨ Highlights
 
-* 🎯 **Robust by construction** — ML-NAM reduces MSE by **14%–29%** compared to NAM under non-Gaussian noise.
+* 🎯 **Robust by construction** — ML-NAM significantly reduces MSE compared to NAM under non-Gaussian noise.
 * 🧩 **No distributional assumptions** — a fixed-bandwidth kernel density estimator models the residual density, which is robust to outliers and heavy tails.
 * 📐 **Theoretical guarantees** — non-asymptotic bounds on the excess risk under mild conditions, with a polynomial-decay minimax convergence rate when the target lies in a Besov space.
 * 🔍 **Interpretable** — each feature's contribution is a learned 1-D shape function that can be visualized.
