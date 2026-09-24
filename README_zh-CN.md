@@ -68,7 +68,7 @@ ML-NAM/
 │   │   ├── MLNAM_main.py      # 命令行入口
 │   │   └── run_simulation.py  # Table 3 完整复现脚本
 │   ├── dataset/               # 数据集（CaliforniaHousing）
-│   ├── logs/                  # 实验输出（simulation_quick.csv）
+│   ├── logs/                  # 实验日志（仅本地保存，不上传）
 │   ├── requirements.txt
 │   └── run.sh
 └── MLNAM.pdf                  # 论文手稿
@@ -117,7 +117,7 @@ python run_simulation.py --repeats 5 --dims 10,100,200,400
 python run_simulation.py --quick
 ```
 
-脚本会对每个（噪声 × 离群比例 × 维度）组合训练 **NAM / ML-NAM / ML-NAM+**，报告平均 MSE / MAE（± 标准差）并与论文参考值对比；原始结果保存至 `logs/simulation_results.csv`。
+脚本会对每个（噪声 × 离群比例 × 维度）组合训练 **NAM / ML-NAM / ML-NAM+**，报告平均 MSE / MAE（± 标准差）并与论文参考值对比；原始结果保存至本地 `logs/` 目录（实验结果不上传至仓库）。
 
 ### 3. 仿真数据生成（论文 Sec. 4.1）
 
@@ -153,7 +153,6 @@ f^{*}(x)=x_1^{3}+x_2+x_3^{1/3}+|x_4|+\sin(x_5)+\cos(x_6^{2})+e^{x_7}+e^{x_8^{2}}
 
 * ML-NAM 在所有仿真场景下与论文参考值相当或更优；干净高斯场景的测试 MSE 达到理论噪声下限（0.0135）。
 * 10 个信息特征的形状函数 MAE（Table 4）平均为 **0.001–0.008**。
-* 每次运行的原始记录见 [`logs/simulation_quick.csv`](code/ML-NAM/logs/simulation_quick.csv)。
 
 ## ⚙️ 超参数
 

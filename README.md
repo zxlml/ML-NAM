@@ -68,7 +68,7 @@ ML-NAM/
 │   │   ├── MLNAM_main.py      # Command-line entry point
 │   │   └── run_simulation.py  # Full Table 3 reproduction runner
 │   ├── dataset/               # Datasets (CaliforniaHousing)
-│   ├── logs/                  # Experiment outputs (simulation_quick.csv)
+│   ├── logs/                  # Experiment logs (local only, not tracked)
 │   ├── requirements.txt
 │   └── run.sh
 └── MLNAM.pdf                  # Paper manuscript
@@ -117,7 +117,7 @@ python run_simulation.py --repeats 5 --dims 10,100,200,400
 python run_simulation.py --quick
 ```
 
-The script trains **NAM / ML-NAM / ML-NAM+** for every (noise × outlier ratio × dimension) cell and reports average MSE / MAE (± std) together with the paper's reference values; raw results are saved to `logs/simulation_results.csv`.
+The script trains **NAM / ML-NAM / ML-NAM+** for every (noise × outlier ratio × dimension) cell and reports average MSE / MAE (± std) together with the paper's reference values; raw results are saved to the local `logs/` directory (experiment results are not tracked in this repository).
 
 ### 3. Simulation data generation (paper Sec. 4.1)
 
@@ -153,7 +153,6 @@ Test MSE on the simulation study (mean ± std over repeats; scaled target space,
 
 * ML-NAM matches or outperforms the paper's reference values on all simulation cells; on the clean Gaussian case the test MSE reaches the theoretical noise floor (0.0135).
 * Shape-function MAE (Table 4) averaged **0.001–0.008** for the 10 informative components.
-* A raw CSV of every run is available in [`logs/simulation_quick.csv`](code/ML-NAM/logs/simulation_quick.csv).
 
 ## ⚙️ Hyperparameters
 
